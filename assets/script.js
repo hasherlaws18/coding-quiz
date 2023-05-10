@@ -5,7 +5,6 @@ const questionText = document.getElementById('Question');
 const Scoredisplay = document.getElementById('Score')
 const timerdisplay = document.getElementById('timerdisplay');
 const scoreConatainer = document.querySelector('.Score-Container');
-const answerText = document.getElementById('choice-id');
 const Answer1 = document.getElementById('Answer-1')
 const Answer2 = document.getElementById('Answer-2')
 const Answer3 = document.getElementById('Answer-3')
@@ -88,21 +87,55 @@ let i = 0;
   }
 
   function setNextQuestion() {
+    if(currentQuestionIndex < Quizquestions.length -1){
     showQuestion(Quizquestions[currentQuestionIndex]);
+    enableAnswerButtons();
+   } else{
+    endquiz();
+   }
   }
 
-  function showQuestion(Question) {
-     questionText.innerText = Question.question;
-     Answer1.innerText = Question.Choices[0].text;
-     Answer1.dataset.id = Question.Choices[0].id;
-     Answer2.innerText = Question.Choices[1].text;
-     Answer2.dataset.id = Question.Choices[1].id;
-     Answer3.innerText = Question.Choices[2].text;
-     Answer3.dataset.id = Question.Choices[2].id;
-     Answer4.innerText = Question.Choices[3].text;
-     Answer4.dataset.id = Question.Choices[3].id;
+  function showQuestion(question) {
+    questionText.innerText = question.question
+    Answer1.innerText = question.Choices[0].text;
+    Answer2.innerText = question.Choices[1].text;
+    Answer3.innerText = question.Choices[2].text;
+    Answer4.innerText = question.Choices[3].text;
+
+    Answer1.addEventListener('click', () => {
+      ScoreCounter('Answer-1');
+      Answer1.classList.add('selected');
+      disableAnswerButtons();
+    })
+    Answer2.addEventListener('click', () => {
+      ScoreCounter('Answer-2');
+      Answer2.classList.add('selected');
+      disableAnswerButtons();
+    })
+    Answer2.addEventListener('click', () => {
+      ScoreCounter('Answer-2');
+      Answer2.classList.add('selected');
+      disableAnswerButtons();
+    })
+    Answer2.addEventListener('click', () => {
+      ScoreCounter('Answer-2');
+      Answer2.classList.add('selected');
+      disableAnswerButtons();
+    })
+  }
+  function disableAnswerButtons(){
+    Answer1.disable = true;
+    Answer2.disable = true;
+    Answer3.disable = true;
+    Answer4.disable = true;
   }
 
+  function enableAnswerButtons(){
+    Answer1.disable = false;
+    Answer2.disable = false;
+    Answer3.disable = false;
+    Answer4.disable = false;
+  }
   function timer(){
     timerdisplay.innerText = timeLeft;
     TimeInterval = setInterval(() => {
@@ -119,8 +152,8 @@ let i = 0;
     const currentQuestion = Quizquestions[currentQuestionIndex];
     if (selectedAnswerId === currentQuestion.CorrectAnswer) {
       score += 1;
-    } else{
-      score -=1;
+    } else {
+      score -=1
     }
     Scoredisplay.innerText = `Score: ${score}`;
   }
