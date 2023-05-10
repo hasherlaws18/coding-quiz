@@ -1,9 +1,11 @@
 const startButton = document.getElementById('start-btn')
 const nextButton = document.getElementById('next-btn')
-const questioncontainer = document.getElementById('question-container')
+const Questioncontainer = document.getElementById('Questions-container')
+const questionText = document.getElementById('Question');
+const Scoredisplay = document.getElementById('Score')
 const timerdisplay = document.getElementById('timerdisplay');
-const answerbuttons = document.querySelectorAll('.button.is-black')
 const scoreConatainer = document.querySelector('.Score-Container');
+const answerText = document.getElementById('choice-id');
 const Answer1 = document.getElementById('Answer-1')
 const Answer2 = document.getElementById('Answer-2')
 const Answer3 = document.getElementById('Answer-3')
@@ -12,9 +14,10 @@ var timeLeft =60;
 var TimeInterval;
 var currentQuestionIndex;
 var score;
+let i = 0;
 
 
-  const questions = [
+  const Quizquestions = [
     {
         question: 'What is Used to style a page',
         Choices : [
@@ -70,21 +73,63 @@ var score;
 
   startButton.addEventListener('click', startQuiz);
   nextButton.addEventListener('click', () => {
-    currentQuestionIndex;
+    currentQuestionIndex++;
     setNextQuestion()
+    
   });
 
-function startQuiz() {
-    currentQuestionIndex = 0;
+  function startQuiz() {
     score = 0;
-    timeLeft = 60;
-    scoreConatainer.innerHTML = '';
+    currentQuestionIndex = 0;
     startButton.classList.add('hide');
-    questioncontainer.classList.remove('hide');
+    Questioncontainer.classList.remove('hide');
     setNextQuestion();
-    TimeInterval = setInterval(countdown, 1000);
-}
+    timer();
+  }
 
-function setNextQuestion() {
-    
-}
+  function setNextQuestion() {
+    showQuestion(Quizquestions[currentQuestionIndex]);
+  }
+
+  function showQuestion(Question) {
+     questionText.innerText = Question.question;
+     Answer1.innerText = Question.Choices[0].text;
+     Answer1.dataset.id = Question.Choices[0].id;
+     Answer2.innerText = Question.Choices[1].text;
+     Answer2.dataset.id = Question.Choices[1].id;
+     Answer3.innerText = Question.Choices[2].text;
+     Answer3.dataset.id = Question.Choices[2].id;
+     Answer4.innerText = Question.Choices[3].text;
+     Answer4.dataset.id = Question.Choices[3].id;
+  }
+
+  function timer(){
+    timerdisplay.innerText = timeLeft;
+    TimeInterval = setInterval(() => {
+      if (timeLeft <= 0) {
+        clearInterval(TimeInterval);
+        endquiz();
+      }
+      timerdisplay.innerText = timeLeft;
+      timeLeft -= 1;
+    }, 1000);
+  }
+
+  function ScoreCounter(selectedAnswerId) {
+    const currentQuestion = Quizquestions[currentQuestionIndex];
+    if (selectedAnswerId === currentQuestion.CorrectAnswer) {
+      score += 1;
+    } else{
+      score -=1;
+    }
+    Scoredisplay.innerText = `Score: ${score}`;
+  }
+  
+  
+
+  function endquiz() {
+    clearInterval(TimeInterval);
+    scoreConatainer.classList.remove('hide');
+    Scoredisplay.innerText = `Your Final Score: ${score}`;
+  }
+  
